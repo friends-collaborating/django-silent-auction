@@ -7,7 +7,7 @@ python:
 cache: false
 
 install:
-  - pip install -r requirements.txt"
+  - pip install -r requirements.txt
 
 script:
   - python silent_auction/tests/simple.py
