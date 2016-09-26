@@ -7,4 +7,6 @@ All enhancements and patches to django-silent-auction will be documented in this
 
 [2016-09-26]
 ============
+- Added First Unit Test
+- Added Travis CI
 - initial commit
