@@ -1,0 +1,20 @@
+sudo: false
+language: python
+python:
+  - "3.4"
+  - "3.5"
+
+cache: false
+
+install:
+  - pip install -r requirements.txt"
+
+script:
+  - python silent_auction/tests/simple.py
+
+notifications:
+  email: false
+
+branches:
+  only:
+    - master
