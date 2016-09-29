@@ -1,0 +1,128 @@
+from django.db import models
+from django.conf import settings
+from taggit.managers import TaggableManager
+
+
+class Location(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+    )
+    name = models.CharField(
+        max_length=160,
+    )
+
+    class Meta:
+        verbose_name_plural = "Locations"
+
+    def __str__(self):
+        return str(self.id)
+
+
+class Event(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+    )
+    name = models.CharField(
+        max_length=160,
+    )
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    location = models.ForeignKey(
+        "Location"
+    )
+    description = models.TextField()
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="auction_events",
+    )
+
+    class Meta:
+        verbose_name_plural = "Events"
+
+    def __str__(self):
+        return str(self.id)
+
+
+class EventAdmin(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+    )
+    event = models.ForeignKey(
+        "Event",
+        on_delete=models.CASCADE,
+    )
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+
+    class Meta:
+        verbose_name_plural = "Event Admin"
+
+    def __str__(self):
+        return str(self.id)
+
+
+class Item(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+    )
+    name = models.CharField(
+        max_length=160,
+    )
+    description = models.TextField()
+    seller = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+    )
+    retail_value = models.DecimalField(
+        max_digits=7,
+        decimal_places=2,
+    )
+    min_bid = models.DecimalField(
+        max_digits=7,
+        decimal_places=2,
+    )
+    event = models.ForeignKey(
+        "Event"
+    )
+
+    tags = TaggableManager()
+
+    class Meta:
+        verbose_name_plural = "Items"
+
+    def __str__(self):
+        return str(self.id)
+
+
+class Bid(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+    )
+    bidder = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="auction_bids",
+    )
+    item = models.ForeignKey(
+        "Item",
+        on_delete=models.CASCADE,
+    )
+    value = models.DecimalField(
+        max_digits=7,
+        decimal_places=2,
+    )
+    timestamp = models.DateTimeField(
+        auto_created=True,
+    )
+
+    class Meta:
+        verbose_name_plural = "Bids"
+
+    def __str__(self):
+        return str(self.id)
