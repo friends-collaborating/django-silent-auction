@@ -1,0 +1,14 @@
+/* TEAM */
+	Chef: Joost Van Dorp
+	Contact: info [at] vandorp.io
+	Twitter: @vandorjw
+	From: Toronto, Ontario, Canada
+
+/* THANKS */
+
+
+/* SITE */
+	Last update: 2016/09/29
+	Language: English
+	Doctype:HTML5
+	Tools: Django, django-restframework, travis-ci, docker

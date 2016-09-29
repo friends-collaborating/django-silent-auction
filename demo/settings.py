@@ -2,7 +2,7 @@
 import os
 import uuid
 
-gettext = lambda s: s
+gettext = lambda s: s  # noqa
 
 DEBUG = True
 
@@ -55,5 +55,5 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'django.contrib.staticfiles',
     'taggit',
-    'silent-auction'
+    'silent_auction'
 )
