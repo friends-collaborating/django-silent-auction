@@ -1,7 +1,9 @@
 from rest_framework import viewsets
 from silent_auction.models import Location
+from silent_auction.serializers import LocationSerializer
 
-class LocationViewSet(viewsets.ViewSet):
+
+class LocationViewSet(viewsets.ModelViewSet):
     """
     Example empty viewset demonstrating the standard
     actions that will be handled by a router class.
@@ -10,20 +12,5 @@ class LocationViewSet(viewsets.ViewSet):
     the `format=None` keyword argument for each action.
     """
 
-    def list(self, request):
-        queryset = Location.objects.all()
-
-    def create(self, request):
-        queryset = Location.objects.all()
-
-    def retrieve(self, request, pk=None):
-        queryset = Location.objects.all()
-
-    def update(self, request, pk=None):
-        queryset = Location.objects.all()
-
-    def partial_update(self, request, pk=None):
-        queryset = Location.objects.all()
-
-    def destroy(self, request, pk=None):
-        queryset = Location.objects.all()
+    queryset = Location.objects.all()
+    serializer_class = LocationSerializer

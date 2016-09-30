@@ -1,8 +1,9 @@
 from rest_framework import viewsets
 from silent_auction.models import Event
+from silent_auction.serializers import EventSerializer
 
 
-class EventViewSet(viewsets.ViewSet):
+class EventViewSet(viewsets.ModelViewSet):
     """
     Example empty viewset demonstrating the standard
     actions that will be handled by a router class.
@@ -11,20 +12,5 @@ class EventViewSet(viewsets.ViewSet):
     the `format=None` keyword argument for each action.
     """
 
-    def list(self, request):
-        queryset = Event.objects.all()
-
-    def create(self, request):
-        queryset = Event.objects.all()
-
-    def retrieve(self, request, pk=None):
-        queryset = Event.objects.all()
-
-    def update(self, request, pk=None):
-        queryset = Event.objects.all()
-
-    def partial_update(self, request, pk=None):
-        queryset = Event.objects.all()
-
-    def destroy(self, request, pk=None):
-        queryset = Event.objects.all()
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer

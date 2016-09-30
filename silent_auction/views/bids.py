@@ -1,8 +1,9 @@
 from rest_framework import viewsets
 from silent_auction.models import Bid
+from silent_auction.serializers import BidSerializer
 
 
-class BidViewSet(viewsets.ViewSet):
+class BidViewSet(viewsets.ModelViewSet):
     """
     Example empty viewset demonstrating the standard
     actions that will be handled by a router class.
@@ -11,20 +12,5 @@ class BidViewSet(viewsets.ViewSet):
     the `format=None` keyword argument for each action.
     """
 
-    def list(self, request):
-        queryset = Bid.objects.all()
-
-    def create(self, request):
-        queryset = Bid.objects.all()
-
-    def retrieve(self, request, pk=None):
-        queryset = Bid.objects.all()
-
-    def update(self, request, pk=None):
-        queryset = Bid.objects.all()
-
-    def partial_update(self, request, pk=None):
-        queryset = Bid.objects.all()
-
-    def destroy(self, request, pk=None):
-        queryset = Bid.objects.all()
+    queryset = Bid.objects.all()
+    serializer_class = BidSerializer

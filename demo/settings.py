@@ -25,7 +25,6 @@ USE_TZ = False
 USE_I18N = False
 USE_L10N = False
 
-
 LANGUAGE_CODE = 'en'
 
 LANGUAGES = (
@@ -54,6 +53,24 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'django.contrib.staticfiles',
+    'rest_framework',
     'taggit',
     'silent_auction'
 )
+
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]

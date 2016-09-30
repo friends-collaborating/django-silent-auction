@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.conf import settings
 from taggit.managers import TaggableManager
@@ -6,6 +7,7 @@ from taggit.managers import TaggableManager
 class Location(models.Model):
     id = models.UUIDField(
         primary_key=True,
+        default=uuid.uuid4,
     )
     name = models.CharField(
         max_length=160,
@@ -21,6 +23,7 @@ class Location(models.Model):
 class Event(models.Model):
     id = models.UUIDField(
         primary_key=True,
+        default=uuid.uuid4,
     )
     name = models.CharField(
         max_length=160,
@@ -48,6 +51,7 @@ class Event(models.Model):
 class EventAdmin(models.Model):
     id = models.UUIDField(
         primary_key=True,
+        default=uuid.uuid4,
     )
     event = models.ForeignKey(
         "Event",
@@ -68,6 +72,7 @@ class EventAdmin(models.Model):
 class Item(models.Model):
     id = models.UUIDField(
         primary_key=True,
+        default=uuid.uuid4,
     )
     name = models.CharField(
         max_length=160,
@@ -102,6 +107,7 @@ class Item(models.Model):
 class Bid(models.Model):
     id = models.UUIDField(
         primary_key=True,
+        default=uuid.uuid4,
     )
     bidder = models.ForeignKey(
         settings.AUTH_USER_MODEL,

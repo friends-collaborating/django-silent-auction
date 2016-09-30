@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from silent_auction.models import Item
+from silent_auction.serializers import ItemSerializer
 
 
 class ItemViewSet(viewsets.ViewSet):
@@ -11,20 +12,5 @@ class ItemViewSet(viewsets.ViewSet):
     the `format=None` keyword argument for each action.
     """
 
-    def list(self, request):
-        queryset = Item.objects.all()
-
-    def create(self, request):
-        queryset = Item.objects.all()
-
-    def retrieve(self, request, pk=None):
-        queryset = Item.objects.all()
-
-    def update(self, request, pk=None):
-        queryset = Item.objects.all()
-
-    def partial_update(self, request, pk=None):
-        queryset = Item.objects.all()
-
-    def destroy(self, request, pk=None):
-        queryset = Item.objects.all()
+    queryset = Item.objects.all()
+    serializer_class = ItemSerializer
