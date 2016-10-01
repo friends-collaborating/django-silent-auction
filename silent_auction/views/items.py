@@ -3,7 +3,7 @@ from silent_auction.models import Item
 from silent_auction.serializers import ItemSerializer
 
 
-class ItemViewSet(viewsets.ViewSet):
+class ItemViewSet(viewsets.ModelViewSet):
     """
     Example empty viewset demonstrating the standard
     actions that will be handled by a router class.
