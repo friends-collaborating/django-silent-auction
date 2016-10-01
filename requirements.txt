@@ -18,3 +18,5 @@ django-environ==0.4.0
 # For authentication
 django-allauth==0.27.0
 
+# For Tagging Items
+django-taggit==0.21.2
