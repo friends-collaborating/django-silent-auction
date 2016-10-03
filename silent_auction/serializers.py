@@ -9,9 +9,10 @@ class BidSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Event
-        fields = ('name', 'start_date', 'end_date', 'description', 'owner')
+        fields = ('name', 'start_date', 'end_date', 'description', 'owner', 'location')
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -21,8 +22,9 @@ class ItemSerializer(serializers.ModelSerializer):
 
 
 class LocationSerializer(serializers.ModelSerializer):
+    events = serializers.StringRelatedField(many=True)
     class Meta:
         model = Location
-        fields = ('name', )
+        fields = ('name', 'events')
 
 

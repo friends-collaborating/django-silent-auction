@@ -11,13 +11,18 @@ class Location(models.Model):
     )
     name = models.CharField(
         max_length=160,
+        unique=True,
+    )
+    slug = models.SlugField(
+        max_length=160,
+        unique=True,
     )
 
     class Meta:
         verbose_name_plural = "Locations"
 
     def __str__(self):
-        return str(self.id)
+        return self.name
 
 
 class Event(models.Model):
@@ -26,6 +31,9 @@ class Event(models.Model):
         default=uuid.uuid4,
     )
     name = models.CharField(
+        max_length=160,
+    )
+    slug = models.SlugField(
         max_length=160,
     )
     start_date = models.DateTimeField()
@@ -43,9 +51,16 @@ class Event(models.Model):
 
     class Meta:
         verbose_name_plural = "Events"
+        unique_together = (
+            ("name", "location", ),
+            ("slug", "location", ),
+        )
 
     def __str__(self):
-        return str(self.id)
+        return "{name} @ {location}".format(
+            name=self.name,
+            location=self.location,
+        )
 
 
 class EventAdmin(models.Model):
@@ -77,6 +92,9 @@ class Item(models.Model):
     name = models.CharField(
         max_length=160,
     )
+    slug = models.SlugField(
+        max_length=160,
+    )
     description = models.TextField()
     seller = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -99,9 +117,12 @@ class Item(models.Model):
 
     class Meta:
         verbose_name_plural = "Items"
+        unique_together = (
+            ("event", "name", ),
+        )
 
     def __str__(self):
-        return str(self.id)
+        return self.name
 
 
 class Bid(models.Model):
