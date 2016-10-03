@@ -39,7 +39,8 @@ class Event(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     location = models.ForeignKey(
-        "Location"
+        "Location",
+        related_name='events',
     )
     description = models.TextField()
     owner = models.ForeignKey(
@@ -100,6 +101,7 @@ class Item(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
+        related_name="auction_items",
     )
     retail_value = models.DecimalField(
         max_digits=7,
@@ -110,10 +112,11 @@ class Item(models.Model):
         decimal_places=2,
     )
     event = models.ForeignKey(
-        "Event"
+        "Event",
+        related_name='items',
     )
 
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
 
     class Meta:
         verbose_name_plural = "Items"
@@ -139,13 +142,14 @@ class Bid(models.Model):
     item = models.ForeignKey(
         "Item",
         on_delete=models.CASCADE,
+        related_name="bids",
     )
     value = models.DecimalField(
         max_digits=7,
         decimal_places=2,
     )
     timestamp = models.DateTimeField(
-        auto_created=True,
+        auto_now_add=True,
     )
 
     class Meta:
