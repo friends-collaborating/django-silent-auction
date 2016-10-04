@@ -89,6 +89,8 @@ ENV/
 # Rope project settings
 .ropeproject
 
+# PyCharm project settings
+.idea
 
 # Compiled source
 *.com
@@ -121,3 +123,5 @@ Thumbs.db
 
 # Editor backup files
 *~
+
+demo/demo.db
