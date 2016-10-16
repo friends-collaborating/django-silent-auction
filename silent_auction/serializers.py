@@ -79,7 +79,13 @@ class ItemImageSerializer(serializers.ModelSerializer):
 
 
 class ItemSerializer(TranslatableModelSerializer):
-    bids = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    bids = serializers.HyperlinkedRelatedField(
+        many=True,
+        read_only=True,
+        view_name='api:retrieve_bid',
+        lookup_field='pk',
+        lookup_url_kwarg='bid_uuid',
+    )
     images = ItemImageSerializer(many=True, read_only=True)
     translations = TranslatedFieldsField(shared_model=Item)
 
