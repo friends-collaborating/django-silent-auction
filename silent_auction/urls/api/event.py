@@ -15,13 +15,23 @@ urlpatterns = [
         name='create_event',
     ),
     url(
-        regex=r'^update/(?P<uuid>[-\w]+)/$',
+        regex=r'^(?P<event_uuid>[-\w]+)/$',
+        view=event.retrieve_event,
+        name='retrieve_event',
+    ),
+    url(
+        regex=r'^(?P<event_uuid>[-\w]+)/update/$',
         view=event.update_event,
         name='update_event',
     ),
     url(
-        regex=r'^(?P<uuid>[-\w]+)/$',
-        view=event.retrieve_event,
-        name='retrieve_event',
+        regex=r'^(?P<event_uuid>[-\w]+)/delete/$',
+        view=event.delete_event,
+        name='delete_event',
+    ),
+    url(
+        regex=r'^(?P<event_uuid>[-\w]+)/items/$',
+        view=event.list_event_items,
+        name='list_event_items',
     ),
 ]

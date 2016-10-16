@@ -13,12 +13,24 @@ from silent_auction.models import Bid
 
 
 @api_view(['GET', ])
-def retrieve_bid(request, uuid):
+def retrieve_bid(request, bid_uuid):
     """
     """
     if request.method == 'GET':
-        response_data = {"details": "not implemented"}
-        return Response(response_data, status=status.HTTP_200_OK)
+        try:
+            queryset = Bid.objects.get(pk=bid_uuid)
+        except Bid.DoesNotExist:
+            response_data = {
+                "error": {
+                    "state": "not found",
+                    "details": "Bid object with ID {} could not be found.".format(bid_uuid)
+                }
+            }
+            return Response(response_data, status=status.HTTP_404_NOT_FOUND)
+        else:
+            serializer = BidSerializer(queryset)
+            response_data = serializer.data
+            return Response(response_data, status=status.HTTP_200_OK)
 
 
 @api_view(['POST', ])
@@ -31,10 +43,19 @@ def create_bid(request):
 
 
 @api_view(['PUT', ])
-def update_bid(request, uuid):
+def update_bid(request, bid_uuid):
     """
     """
     if request.method == 'PUT':
+        response_data = {"details": "not implemented"}
+        return Response(response_data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET', ])
+def delete_bid(request, bid_uuid):
+    """
+    """
+    if request.method == 'GET':
         response_data = {"details": "not implemented"}
         return Response(response_data, status=status.HTTP_200_OK)
 
@@ -44,5 +65,7 @@ def list_bids(request):
     """
     """
     if request.method == 'GET':
-        response_data = {"details": "not implemented"}
+        queryset = Bid.objects.all()
+        serializer = BidSerializer(queryset, many=True)
+        response_data = serializer.data
         return Response(response_data, status=status.HTTP_200_OK)

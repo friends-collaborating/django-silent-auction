@@ -58,7 +58,8 @@ INSTALLED_APPS = (
     'parler',
     'rest_framework',
     'rest_framework.authtoken',
-    'silent_auction'
+    'silent_auction',
+    'versatileimagefield',
 )
 
 
@@ -101,4 +102,13 @@ PARLER_LANGUAGES = {
         'fallbacks': [LANGUAGE_CODE],
         'hide_untranslated': False,
     }
+}
+
+VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
+    'item_image': [
+        ('full_size', 'url'),
+        ('thumbnail', 'thumbnail__100x100'),
+        ('medium_square_crop', 'crop__400x400'),
+        ('small_square_crop', 'crop__50x50')
+    ]
 }

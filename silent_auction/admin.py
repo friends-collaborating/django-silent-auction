@@ -9,6 +9,7 @@ from silent_auction.models import (
     Event,
     EventAdmin,
     Item,
+    ItemImage,
 )
 
 
@@ -17,11 +18,16 @@ class ItemInline(TranslatableStackedInline):
     extra = 0
 
 
+class ItemImageInline(TranslatableStackedInline):
+    model = ItemImage
+    extra = 0
+
+
 
 @admin.register(Bid)
 class BidAdminConf(admin.ModelAdmin):
     list_display = [
-        'pk',
+        'pk', 'bidder', 'item', 'value', 'created', 'modified',
     ]
 
 
@@ -46,5 +52,8 @@ class EventAdminAdminConf(admin.ModelAdmin):
 @admin.register(Item)
 class ItemAdminConf(TranslatableAdmin):
     list_display = [
-        'pk', 'seller', 'retail_value', 'min_bid', 'event', 'name', 'slug',
+        'pk', 'seller', 'retail_value', 'starting_bid', 'event', 'name', 'slug',
+    ]
+    inlines = [
+        ItemImageInline,
     ]

@@ -7,6 +7,8 @@ from django.utils import timezone
 from django.utils.translation import ugettext as _
 from parler.models import TranslatableModel
 from parler.models import TranslatedFields
+from versatileimagefield.fields import VersatileImageField
+from versatileimagefield.fields import PPOIField
 
 
 class Event(TranslatableModel):
@@ -46,7 +48,7 @@ class Event(TranslatableModel):
         verbose_name_plural = _("events")
 
     def __str__(self):
-        return self.name
+        return str(self.pk)
 
 
 class EventAdmin(models.Model):
@@ -95,11 +97,22 @@ class Item(TranslatableModel):
         _("retail value"),
         max_digits=7,
         decimal_places=2,
+        blank=True,
+        null=True,
     )
-    min_bid = models.DecimalField(
+    starting_bid = models.DecimalField(
         _("starting bid"),
         max_digits=7,
         decimal_places=2,
+        blank=True,
+        null=True,
+    )
+    min_bid_increase = models.DecimalField(
+        _("min bid increase"),
+        max_digits=7,
+        decimal_places=2,
+        blank=True,
+        null=True,
     )
     event = models.ForeignKey(
         "Event",
@@ -122,7 +135,36 @@ class Item(TranslatableModel):
         verbose_name_plural = _("items")
 
     def __str__(self):
-        return self.name
+        return str(self.pk)
+
+
+class ItemImage(TranslatableModel):
+    _uid = models.UUIDField(
+        primary_key=True,
+        editable=False,
+        default=uuid.uuid4,
+    )
+
+    translations = TranslatedFields(
+        name=models.CharField(_("name"), max_length=160),
+        description=models.TextField(_("description")),
+    )
+
+    item = models.ForeignKey(
+        "Item",
+        related_name='images',
+        verbose_name=_("item"),
+    )
+
+    image = VersatileImageField(
+        _('image'),
+        upload_to='item_images/',
+        ppoi_field='image_ppoi'
+    )
+    image_ppoi = PPOIField()
+
+    def __str__(self):
+        return str(self.pk)
 
 
 class Bid(models.Model):
@@ -161,4 +203,4 @@ class Bid(models.Model):
         verbose_name_plural = "Bids"
 
     def __str__(self):
-        return "ITEM: {} | VALUE: {}".format(self.item.name, self.value)
+        return str(self.pk)

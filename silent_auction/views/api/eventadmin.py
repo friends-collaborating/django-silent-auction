@@ -13,7 +13,7 @@ from silent_auction.models import EventAdmin
 
 
 @api_view(['GET', ])
-def retrieve_admin(request, uuid):
+def retrieve_eventadmin(request, uuid):
     """
     """
     if request.method == 'GET':
@@ -22,7 +22,7 @@ def retrieve_admin(request, uuid):
 
 
 @api_view(['POST', ])
-def create_admin(request):
+def create_eventadmin(request):
     """
     """
     if request.method == 'POST':
@@ -31,7 +31,7 @@ def create_admin(request):
 
 
 @api_view(['PUT', ])
-def update_admin(request, uuid):
+def update_eventadmin(request, uuid):
     """
     """
     if request.method == 'PUT':
@@ -40,7 +40,16 @@ def update_admin(request, uuid):
 
 
 @api_view(['GET', ])
-def list_admins(request):
+def delete_eventadmin(request, uuid):
+    """
+    """
+    if request.method == 'GET':
+        response_data = {"details": "not implemented"}
+        return Response(response_data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET', ])
+def list_eventadmins(request):
     """
     """
     if request.method == 'GET':

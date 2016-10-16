@@ -15,13 +15,18 @@ urlpatterns = [
         name='create_bid',
     ),
     url(
-        regex=r'^update/(?P<uuid>[-\w]+)/$',
+        regex=r'^(?P<bid_uuid>[-\w]+)/$',
+        view=bid.retrieve_bid,
+        name='retrieve_bid',
+    ),
+    url(
+        regex=r'^(?P<bid_uuid>[-\w]+)/update/$',
         view=bid.update_bid,
         name='update_bid',
     ),
     url(
-        regex=r'^(?P<uuid>[-\w]+)/$',
-        view=bid.retrieve_bid,
-        name='retrieve_bid',
+        regex=r'^(?P<bid_uuid>[-\w]+)/delete/$',
+        view=bid.delete_bid,
+        name='delete_bid',
     ),
 ]

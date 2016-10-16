@@ -15,13 +15,24 @@ urlpatterns = [
         name='create_item',
     ),
     url(
-        regex=r'^update/(?P<uuid>[-\w]+)/$',
+        regex=r'^(?P<item_uuid>[-\w]+)/$',
+        view=item.retrieve_item,
+        name='retrieve_item',
+    ),
+    url(
+        regex=r'^(?P<item_uuid>[-\w]+)/update/$',
         view=item.update_item,
         name='update_item',
     ),
     url(
-        regex=r'^(?P<uuid>[-\w]+)/$',
-        view=item.retrieve_item,
-        name='retrieve_item',
+        regex=r'^(?P<item_uuid>[-\w]+)/delete/$',
+        view=item.delete_item,
+        name='delete_item',
     ),
+    url(
+        regex=r'^(?P<item_uuid>[-\w]+)/highest-bid/$',
+        view=item.retrieve_highest_bid,
+        name='retrieve_highest_bid',
+    ),
+
 ]
