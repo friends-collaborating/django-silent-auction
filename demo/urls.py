@@ -13,8 +13,8 @@ from django.views.generic.base import RedirectView
 
 
 urlpatterns = [
-    url(r'^$', RedirectView.as_view(url='/api/', permanent=True)),
-    url(r'^api/', include('silent_auction.urls')),
+    url(r'^$', RedirectView.as_view(url='/silent-auction/', permanent=True)),
+    url(r'^silent-auction/', include('silent_auction.urls')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', admin.site.urls),
 ]

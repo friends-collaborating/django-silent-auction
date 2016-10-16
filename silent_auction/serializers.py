@@ -1,5 +1,14 @@
 from rest_framework import serializers
-from silent_auction.models import Bid, Event, Item, Location
+from parler_rest.serializers import (
+    TranslatableModelSerializer,
+    TranslatedFieldsField,
+)
+from silent_auction.models import (
+    Bid,
+    Event,
+    EventAdmin,
+    Item,
+)
 
 
 class BidSerializer(serializers.ModelSerializer):
@@ -17,44 +26,41 @@ class BidSerializer(serializers.ModelSerializer):
         )
 
 
-class EventSerializer(serializers.ModelSerializer):
+class EventAdminSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EventAdmin
+        fields = (
+            'event',
+            'user',
+        )
+
+
+class EventSerializer(TranslatableModelSerializer):
     items = serializers.StringRelatedField(many=True, read_only=True)
+    translations = TranslatedFieldsField(shared_model=Event)
 
     class Meta:
         model = Event
         fields = (
-            'name',
             'start_date',
             'end_date',
-            'description',
             'owner',
-            'location',
             'items',
+            'translations',
         )
 
 
-class ItemSerializer(serializers.ModelSerializer):
+class ItemSerializer(TranslatableModelSerializer):
     bids = serializers.StringRelatedField(many=True, read_only=True)
+    translations = TranslatedFieldsField(shared_model=Item)
 
     class Meta:
         model = Item
         fields = (
-            'name',
-            'description',
             'seller',
             'retail_value',
             'min_bid',
             'event',
             'bids',
-        )
-
-
-class LocationSerializer(serializers.ModelSerializer):
-    events = serializers.StringRelatedField(many=True, read_only=True)
-
-    class Meta:
-        model = Location
-        fields = (
-            'name',
-            'events',
+            'translations',
         )
