@@ -20,6 +20,9 @@ class BidSerializer(serializers.ModelSerializer):
     modified = serializers.DateTimeField(
         read_only=True,
     )
+    pk = serializers.UUIDField(
+        read_only=True,
+    )
 
     class Meta:
         model = Bid

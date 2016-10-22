@@ -1,22 +1,27 @@
 # Django
-Django==1.10.1
+Django==1.10.2
 
 # For the persistence stores
 psycopg2==2.6.2
 
 # Rest apis
-djangorestframework==3.4.7
+djangorestframework==3.5.1
+django-parler-rest==1.4.2
 Markdown==2.6.7
-django-filter==0.15.0
+django-filter==0.15.3
 
 # For Image Manipulation
-pillow==3.3.1
+django-versatileimagefield==1.6
+Pillow==3.4.2
 
 # For Figuring out PATH
 django-environ==0.4.0
 
 # For authentication
-django-allauth==0.27.0
+django-allauth==0.28.0
 
 # For Tagging Items
-django-taggit==0.21.2
+django-taggit==0.21.3
+
+# For Requests
+requests==2.11.1

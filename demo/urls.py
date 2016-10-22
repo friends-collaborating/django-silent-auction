@@ -11,12 +11,15 @@ from django.views.defaults import page_not_found
 from django.views.defaults import permission_denied
 from django.views.generic.base import RedirectView
 
+from rest_framework.authtoken import views
+
 
 urlpatterns = [
     url(r'^$', RedirectView.as_view(url='/silent-auction/', permanent=True)),
     url(r'^silent-auction/', include('silent_auction.urls')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^api-token-auth/', views.obtain_auth_token),
 ]
 
 urlpatterns += [

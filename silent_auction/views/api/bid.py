@@ -37,9 +37,18 @@ def retrieve_bid(request, bid_uuid):
 def create_bid(request):
     """
     """
-    if request.method == 'POST':
-        response_data = {"details": "not implemented"}
+    if request.user.is_authenticated():
+
+        bidder = request.user
+        item = "unkown"
+
+        serializer = BidSerializer(queryset, many=True)
+
+        response_data = {"detail": "not implemented"}
         return Response(response_data, status=status.HTTP_200_OK)
+    else:
+        response_data = {"detail": "not authenticated"}
+        return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)
 
 
 @api_view(['PUT', ])

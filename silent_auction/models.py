@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import datetime
+import logging
 import uuid
 from django.conf import settings
 from django.db import models
@@ -7,8 +7,11 @@ from django.utils import timezone
 from django.utils.translation import ugettext as _
 from parler.models import TranslatableModel
 from parler.models import TranslatedFields
+from parler.models import TranslationDoesNotExist
 from versatileimagefield.fields import VersatileImageField
 from versatileimagefield.fields import PPOIField
+
+logger = logging.getLogger(__name__)
 
 
 class Event(TranslatableModel):
@@ -48,7 +51,13 @@ class Event(TranslatableModel):
         verbose_name_plural = _("events")
 
     def __str__(self):
-        return str(self.pk)
+        try:
+            return self.name
+        except TranslationDoesNotExist:
+            return self.safe_translation_getter("name", any_language=True)
+        except Exception as error:
+            logger.error(error)
+            return str(self.pk)
 
 
 class EventAdmin(models.Model):
@@ -135,7 +144,13 @@ class Item(TranslatableModel):
         verbose_name_plural = _("items")
 
     def __str__(self):
-        return str(self.pk)
+        try:
+            return self.name
+        except TranslationDoesNotExist:
+            return self.safe_translation_getter("name", any_language=True)
+        except Exception as error:
+            logger.error(error)
+            return str(self.pk)
 
 
 class ItemImage(TranslatableModel):
