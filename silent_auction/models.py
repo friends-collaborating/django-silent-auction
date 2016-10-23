@@ -1,136 +1,197 @@
+# -*- coding: utf-8 -*-
+import logging
 import uuid
-from django.db import models
 from django.conf import settings
-from taggit.managers import TaggableManager
+from django.db import models
+from django.db.models import Max
+from django.utils import timezone
+from django.utils.translation import ugettext as _
+from parler.models import TranslatableModel
+from parler.models import TranslatedFields
+from parler.models import TranslationDoesNotExist
+from versatileimagefield.fields import VersatileImageField
+from versatileimagefield.fields import PPOIField
+
+logger = logging.getLogger(__name__)
 
 
-class Location(models.Model):
-    id = models.UUIDField(
+class Event(TranslatableModel):
+    _uid = models.UUIDField(
         primary_key=True,
+        editable=False,
         default=uuid.uuid4,
     )
-    name = models.CharField(
-        max_length=160,
-        unique=True,
+    translations = TranslatedFields(
+        name=models.CharField(_("name"), max_length=160),
+        slug=models.SlugField(_("slug"), max_length=160),
+        description=models.TextField(_("description")),
+        meta={"unique_together": [
+            ('language_code', 'slug', ),
+            ('language_code', 'name', ),
+        ]},
     )
-    slug = models.SlugField(
-        max_length=160,
-        unique=True,
+    start_date_time = models.DateTimeField(
+        _("start time"),
+        default=timezone.now,
     )
-
-    class Meta:
-        verbose_name_plural = "Locations"
-
-    def __str__(self):
-        return self.name
-
-
-class Event(models.Model):
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
+    end_date_time = models.DateTimeField(
+        _("end time"),
+        default=timezone.now,
     )
-    name = models.CharField(
-        max_length=160,
-    )
-    slug = models.SlugField(
-        max_length=160,
-    )
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-    location = models.ForeignKey(
-        "Location",
-        related_name='events',
-    )
-    description = models.TextField()
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         related_name="auction_events",
+        verbose_name=_('owner'),
     )
 
     class Meta:
-        verbose_name_plural = "Events"
-        unique_together = (
-            ("name", "location", ),
-            ("slug", "location", ),
-        )
+        app_label = "silent_auction"
+        verbose_name = _("event")
+        verbose_name_plural = _("events")
 
     def __str__(self):
-        return "{name} @ {location}".format(
-            name=self.name,
-            location=self.location,
-        )
+        try:
+            return self.name
+        except TranslationDoesNotExist:
+            return self.safe_translation_getter("name", any_language=True)
+        except Exception as error:
+            logger.error(error)
+            return str(self.pk)
 
 
 class EventAdmin(models.Model):
-    id = models.UUIDField(
+    _uid = models.UUIDField(
         primary_key=True,
+        editable=False,
         default=uuid.uuid4,
     )
     event = models.ForeignKey(
         "Event",
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
+        verbose_name=_("event"),
     )
-    owner = models.ForeignKey(
+    user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
+        verbose_name=_("username"),
     )
 
     class Meta:
-        verbose_name_plural = "Event Admin"
+        app_label = "silent_auction"
+        verbose_name = _("event admin")
+        verbose_name_plural = _("event admins")
+        unique_together =(
+            ("event", "user", )
+        )
 
     def __str__(self):
-        return str(self.id)
+        return str(self.pk)
 
 
-class Item(models.Model):
-    id = models.UUIDField(
+class Item(TranslatableModel):
+    _uid = models.UUIDField(
         primary_key=True,
+        editable=False,
         default=uuid.uuid4,
     )
-    name = models.CharField(
-        max_length=160,
-    )
-    slug = models.SlugField(
-        max_length=160,
-    )
-    description = models.TextField()
     seller = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         null=True,
         related_name="auction_items",
+        verbose_name=_("seller"),
     )
     retail_value = models.DecimalField(
+        _("retail value"),
         max_digits=7,
         decimal_places=2,
+        blank=True,
+        null=True,
     )
-    min_bid = models.DecimalField(
+    starting_value = models.DecimalField(
+        _("starting value"),
         max_digits=7,
         decimal_places=2,
+        blank=True,
+        null=True,
+    )
+    min_increase = models.DecimalField(
+        _("min increase"),
+        max_digits=7,
+        decimal_places=2,
+        blank=True,
+        null=True,
     )
     event = models.ForeignKey(
         "Event",
         related_name='items',
+        verbose_name=_("event"),
+    )
+    translations = TranslatedFields(
+        name=models.CharField(_("name"), max_length=160),
+        slug=models.SlugField(_("slug"), max_length=160),
+        description=models.TextField(_("description")),
+        meta={"unique_together": [
+            ('language_code', 'slug', ),
+            ('language_code', 'name', ),
+        ]},
     )
 
-    tags = TaggableManager(blank=True)
-
     class Meta:
-        verbose_name_plural = "Items"
-        unique_together = (
-            ("event", "name", ),
-        )
+        app_label = "silent_auction"
+        verbose_name = _("item")
+        verbose_name_plural = _("items")
 
     def __str__(self):
-        return self.name
+        try:
+            return self.name
+        except TranslationDoesNotExist as warning:
+            logger.warning(warning)
+            return self.safe_translation_getter("name", any_language=True)
+        except Exception as error:
+            logger.error(error)
+            return str(self.pk)
+
+    def get_winning_bid(self):
+        max_value = self.bids.aggregate(Max('value'))
+        return self.bids.filter(value=max_value['value__max']).order_by('-created').first()
+
+
+class ItemImage(TranslatableModel):
+    _uid = models.UUIDField(
+        primary_key=True,
+        editable=False,
+        default=uuid.uuid4,
+    )
+
+    translations = TranslatedFields(
+        name=models.CharField(_("name"), max_length=160),
+        description=models.TextField(_("description")),
+    )
+
+    item = models.ForeignKey(
+        "Item",
+        related_name='images',
+        verbose_name=_("item"),
+    )
+
+    image = VersatileImageField(
+        _('image'),
+        upload_to='item_images/',
+        ppoi_field='image_ppoi'
+    )
+    image_ppoi = PPOIField()
+
+    def __str__(self):
+        return str(self.pk)
 
 
 class Bid(models.Model):
     id = models.UUIDField(
         primary_key=True,
+        editable=False,
         default=uuid.uuid4,
     )
     bidder = models.ForeignKey(
@@ -138,22 +199,29 @@ class Bid(models.Model):
         on_delete=models.SET_NULL,
         null=True,
         related_name="auction_bids",
+        verbose_name=_("bidder"),
     )
     item = models.ForeignKey(
         "Item",
         on_delete=models.CASCADE,
         related_name="bids",
+        verbose_name=_("item"),
     )
     value = models.DecimalField(
+        _("value"),
         max_digits=7,
         decimal_places=2,
     )
-    timestamp = models.DateTimeField(
-        auto_now_add=True,
+    created = models.DateTimeField(
+        editable=False,
+        default=timezone.now,
+    )
+    modified = models.DateTimeField(
+        auto_now=True,
     )
 
     class Meta:
         verbose_name_plural = "Bids"
 
     def __str__(self):
-        return str(self.id)
+        return str(self.pk)
