@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+import uuid
+from django.utils import timezone
 from rest_framework import serializers
 from parler_rest.serializers import (
     TranslatableModelSerializer,
@@ -16,12 +19,15 @@ from silent_auction.models import (
 class BidSerializer(serializers.ModelSerializer):
     created = serializers.DateTimeField(
         read_only=True,
+        default=serializers.CreateOnlyDefault(timezone.now),
     )
     modified = serializers.DateTimeField(
         read_only=True,
+        default=serializers.CreateOnlyDefault(timezone.now),
     )
     pk = serializers.UUIDField(
         read_only=True,
+        default=serializers.CreateOnlyDefault(uuid.uuid4),
     )
 
     class Meta:
@@ -37,6 +43,11 @@ class BidSerializer(serializers.ModelSerializer):
 
 
 class EventAdminSerializer(serializers.ModelSerializer):
+    pk = serializers.UUIDField(
+        read_only=True,
+        default=serializers.CreateOnlyDefault(uuid.uuid4),
+    )
+
     class Meta:
         model = EventAdmin
         fields = (
@@ -47,7 +58,13 @@ class EventAdminSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(TranslatableModelSerializer):
-    translations = TranslatedFieldsField(shared_model=Event)
+    pk = serializers.UUIDField(
+        read_only=True,
+        default=serializers.CreateOnlyDefault(uuid.uuid4),
+    )
+    translations = TranslatedFieldsField(
+        shared_model=Event,
+    )
     items = serializers.HyperlinkedRelatedField(
         many=True,
         read_only=True,
@@ -82,6 +99,10 @@ class ItemImageSerializer(serializers.ModelSerializer):
 
 
 class ItemSerializer(TranslatableModelSerializer):
+    pk = serializers.UUIDField(
+        read_only=True,
+        default=serializers.CreateOnlyDefault(uuid.uuid4),
+    )
     bids = serializers.HyperlinkedRelatedField(
         many=True,
         read_only=True,

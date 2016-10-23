@@ -3,6 +3,7 @@ import logging
 import uuid
 from django.conf import settings
 from django.db import models
+from django.db.models import Max
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 from parler.models import TranslatableModel
@@ -109,15 +110,15 @@ class Item(TranslatableModel):
         blank=True,
         null=True,
     )
-    starting_bid = models.DecimalField(
-        _("starting bid"),
+    starting_value = models.DecimalField(
+        _("starting value"),
         max_digits=7,
         decimal_places=2,
         blank=True,
         null=True,
     )
-    min_bid_increase = models.DecimalField(
-        _("min bid increase"),
+    min_increase = models.DecimalField(
+        _("min increase"),
         max_digits=7,
         decimal_places=2,
         blank=True,
@@ -146,11 +147,16 @@ class Item(TranslatableModel):
     def __str__(self):
         try:
             return self.name
-        except TranslationDoesNotExist:
+        except TranslationDoesNotExist as warning:
+            logger.warning(warning)
             return self.safe_translation_getter("name", any_language=True)
         except Exception as error:
             logger.error(error)
             return str(self.pk)
+
+    def get_winning_bid(self):
+        max_value = self.bids.aggregate(Max('value'))
+        return self.bids.filter(value=max_value['value__max']).order_by('-created').first()
 
 
 class ItemImage(TranslatableModel):

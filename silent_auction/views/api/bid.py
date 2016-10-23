@@ -39,13 +39,15 @@ def create_bid(request):
     """
     if request.user.is_authenticated():
 
-        bidder = request.user
-        item = "unkown"
+        data = request.data
+        data['bidder'] = str(request.user.pk)
 
-        serializer = BidSerializer(queryset, many=True)
-
-        response_data = {"detail": "not implemented"}
-        return Response(response_data, status=status.HTTP_200_OK)
+        serializer = BidSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.errors, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_200_OK)
     else:
         response_data = {"detail": "not authenticated"}
         return Response(response_data, status=status.HTTP_401_UNAUTHORIZED)

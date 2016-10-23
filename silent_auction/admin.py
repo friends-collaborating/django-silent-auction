@@ -2,15 +2,13 @@
 from django.contrib import admin
 from parler.admin import (
     TranslatableAdmin,
-    TranslatableStackedInline,
-)
-from silent_auction.models import (
-    Bid,
-    Event,
-    EventAdmin,
-    Item,
-    ItemImage,
-)
+    TranslatableStackedInline, )
+from silent_auction.forms import BidForm
+from silent_auction.models import Bid
+from silent_auction.models import Event
+from silent_auction.models import EventAdmin
+from silent_auction.models import Item
+from silent_auction.models import ItemImage
 
 
 class ItemInline(TranslatableStackedInline):
@@ -23,9 +21,9 @@ class ItemImageInline(TranslatableStackedInline):
     extra = 0
 
 
-
 @admin.register(Bid)
 class BidAdminConf(admin.ModelAdmin):
+    form = BidForm
     list_display = [
         'pk', 'bidder', 'item', 'value', 'created', 'modified',
     ]
@@ -48,11 +46,10 @@ class EventAdminAdminConf(admin.ModelAdmin):
     ]
 
 
-
 @admin.register(Item)
 class ItemAdminConf(TranslatableAdmin):
     list_display = [
-        'pk', 'seller', 'retail_value', 'starting_bid', 'event', 'name', 'slug',
+        'pk', 'seller', 'retail_value', 'starting_value', 'event', 'name', 'slug',
     ]
     inlines = [
         ItemImageInline,
