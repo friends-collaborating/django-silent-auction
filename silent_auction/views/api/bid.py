@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
+import json
+import logging
 try:
     from django.contrib.auth import get_user_model
     User = get_user_model()
 except ImportError:
     from django.contrib.auth.models import User
-from django.db.models import Q
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from silent_auction.serializers import BidSerializer
 from silent_auction.models import Bid
+from silent_auction.forms import BidForm
+
+logger = logging.getLogger(__name__)
 
 
 @api_view(['GET', ])
@@ -42,10 +46,18 @@ def create_bid(request):
         data = request.data
         data['bidder'] = str(request.user.pk)
 
+        logger.info(json.dumps(data))
+
         serializer = BidSerializer(data=data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.errors, status=status.HTTP_200_OK)
+            form = BidForm(data)
+            if form.is_valid():
+                serializer.save()
+                response_data = {"detail": "saved"}
+                return Response(response_data, status=status.HTTP_200_OK)
+            else:
+                return Response(form.errors, status=status.HTTP_200_OK)
+
         else:
             return Response(serializer.errors, status=status.HTTP_200_OK)
     else:
