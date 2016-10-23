@@ -8,6 +8,10 @@ cache: false
 install:
   - pip install -r requirements.txt
 
+before_script:
+  - export PYTHONPATH=$PYTHONPATH:$(pwd)
+  - export DJANGO_SETTINGS_MODuLE=demo.settings
+
 script:
   - django-admin test
 
