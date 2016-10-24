@@ -26,7 +26,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Intended Audience :: Developers',
         'Operating System :: OS Independent',
-        'License :: Non-Free',
+        'License :: OSI Approved :: MIT License',
         'Topic :: Software Development :: Libraries :: Python Modules',
     ],
     license=silent_auction.__license__,
