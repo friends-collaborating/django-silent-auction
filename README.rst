@@ -1,6 +1,6 @@
-=======================================================
-Django Silent Auction |latest-version| |travis-develop|
-=======================================================
+=======================================================================
+Django Silent Auction |latest-version| |travis-develop| |waffle-status|
+=======================================================================
 
 Simple yet powerful and really extendable appllication for managing an auction within your Django Web Site.
 
@@ -19,4 +19,7 @@ Online resources
     :target: https://travis-ci.org/friends-collaborating/django-silent-auction
 .. |latest-version| image:: https://badge.fury.io/py/silent-auction.svg
     :target: https://badge.fury.io/py/silent-auction
+.. |waffle-status| image:: https://badge.waffle.io/friends-collaborating/django-silent-auction.svg?label=ready&title=Ready 
+    :target: https://waffle.io/friends-collaborating/django-silent-auction 
+    :alt: 'Stories in Ready'
 
