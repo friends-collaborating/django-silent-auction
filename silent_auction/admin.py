@@ -4,11 +4,12 @@ from parler.admin import (
     TranslatableAdmin,
     TranslatableStackedInline, )
 from silent_auction.forms import BidForm
-from silent_auction.models import Bid
-from silent_auction.models import Event
-from silent_auction.models import EventAdmin
-from silent_auction.models import Item
-from silent_auction.models import ItemImage
+from silent_auction.models import (
+    Bid,
+    Event,
+    EventAdministrator,
+    Item,
+    ItemImage, )
 
 
 class ItemInline(TranslatableStackedInline):
@@ -22,7 +23,7 @@ class ItemImageInline(TranslatableStackedInline):
 
 
 @admin.register(Bid)
-class BidAdminConf(admin.ModelAdmin):
+class BidAdmin(admin.ModelAdmin):
     form = BidForm
     list_display = [
         'pk', 'bidder', 'item', 'value', 'created', 'modified',
@@ -30,7 +31,7 @@ class BidAdminConf(admin.ModelAdmin):
 
 
 @admin.register(Event)
-class EventAdminConf(TranslatableAdmin):
+class EventAdmin(TranslatableAdmin):
     list_display = [
         'pk', 'name', 'owner', 'start_date_time', 'end_date_time',
     ]
@@ -39,15 +40,15 @@ class EventAdminConf(TranslatableAdmin):
     ]
 
 
-@admin.register(EventAdmin)
-class EventAdminAdminConf(admin.ModelAdmin):
+@admin.register(EventAdministrator)
+class EventAdministratorAdmin(admin.ModelAdmin):
     list_display = [
         'pk', 'user', 'event',
     ]
 
 
 @admin.register(Item)
-class ItemAdminConf(TranslatableAdmin):
+class ItemAdmin(TranslatableAdmin):
     list_display = [
         'pk', 'seller', 'retail_value', 'starting_value', 'event', 'name', 'slug',
     ]

@@ -8,8 +8,8 @@ from django.db.models import Q
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from silent_auction.serializers import EventAdminSerializer
-from silent_auction.models import EventAdmin
+from silent_auction.serializers import EventAdministratorSerializer
+from silent_auction.models import EventAdministrator
 
 
 @api_view(['GET', ])

@@ -25,7 +25,7 @@ def retrieve_item(request, item_uuid):
     if request.method == 'GET':
         try:
             queryset = Item.objects.get(pk=item_uuid)
-        except Item.DoesNotExist:
+        except (Item.DoesNotExist, ValueError):
             response_data = {
                 "error": {
                     "state": "not found",

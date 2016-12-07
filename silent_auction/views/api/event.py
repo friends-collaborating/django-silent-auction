@@ -25,7 +25,7 @@ def retrieve_event(request, event_uuid):
     if request.method == 'GET':
         try:
             queryset = Event.objects.get(pk=event_uuid)
-        except Event.DoesNotExist:
+        except (Event.DoesNotExist, ValueError):
             response_data = {
                 "error": {
                     "state": "not found",
@@ -70,6 +70,7 @@ def delete_event(request, event_uuid):
 def list_events(request):
     """
     """
+
     if request.method == 'GET':
         queryset = Event.objects.all()
         serializer = EventSerializer(queryset, many=True, context={'request': request})
