@@ -61,7 +61,7 @@ class Event(TranslatableModel):
             return str(self.pk)
 
 
-class EventAdmin(models.Model):
+class EventAdministrator(models.Model):
     _uid = models.UUIDField(
         primary_key=True,
         editable=False,

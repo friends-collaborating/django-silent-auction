@@ -23,7 +23,7 @@ def retrieve_bid(request, bid_uuid):
     if request.method == 'GET':
         try:
             queryset = Bid.objects.get(pk=bid_uuid)
-        except Bid.DoesNotExist:
+        except (Bid.DoesNotExist, ValueError):
             response_data = {
                 "error": {
                     "state": "not found",

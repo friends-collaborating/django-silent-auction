@@ -10,7 +10,7 @@ from versatileimagefield.serializers import VersatileImageFieldSerializer
 from silent_auction.models import (
     Bid,
     Event,
-    EventAdmin,
+    EventAdministrator,
     Item,
     ItemImage,
 )
@@ -42,14 +42,14 @@ class BidSerializer(serializers.ModelSerializer):
         )
 
 
-class EventAdminSerializer(serializers.ModelSerializer):
+class EventAdministratorSerializer(serializers.ModelSerializer):
     pk = serializers.UUIDField(
         read_only=True,
         default=serializers.CreateOnlyDefault(uuid.uuid4),
     )
 
     class Meta:
-        model = EventAdmin
+        model = EventAdministrator
         fields = (
             'pk',
             'event',
@@ -119,8 +119,8 @@ class ItemSerializer(TranslatableModelSerializer):
             'pk',
             'seller',
             'retail_value',
-            'starting_bid',
-            'min_bid_increase',
+            'starting_value',
+            'min_increase',
             'event',
             'bids',
             'translations',
