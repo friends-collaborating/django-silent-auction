@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import uuid
+from django.urls import reverse
 from django.utils import timezone
 from rest_framework import serializers
 from parler_rest.serializers import (
@@ -110,6 +111,7 @@ class ItemSerializer(TranslatableModelSerializer):
         lookup_field='pk',
         lookup_url_kwarg='bid_uuid',
     )
+    event = serializers.SerializerMethodField()
     images = ItemImageSerializer(many=True, read_only=True)
     translations = TranslatedFieldsField(shared_model=Item)
 
@@ -126,3 +128,16 @@ class ItemSerializer(TranslatableModelSerializer):
             'translations',
             'images',
         )
+
+    def get_event(self, obj):
+        try:
+            request = self.context['request']
+            url = request.build_absolute_uri(reverse('api:retrieve_event', kwargs={'event_uuid': str(obj.event.pk)}))
+        except:
+            url = reverse('api:retrieve_event', kwargs={'event_uuid': str(obj.event.pk)})
+
+        return {
+            "pk": str(obj.event.pk),
+            "name": obj.event.name,
+            "url": url,
+        }
