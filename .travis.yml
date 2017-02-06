@@ -12,8 +12,16 @@ before_script:
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
   - export DJANGO_SETTINGS_MODuLE=demo.settings
 
+addons:
+  sonarqube:
+    token:
+      secure: $SONAR_TOKEN
+  branches:
+    - master
+
 script:
   - django-admin test
+  - sonar-scanner
 
 notifications:
   email: false
