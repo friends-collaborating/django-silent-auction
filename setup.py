@@ -33,7 +33,7 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'Django==1.10.1',
+        'Django==1.11.29',
         'djangorestframework==3.4.7',
         'Markdown==2.6.7',
         'django-filter==0.15.3',
