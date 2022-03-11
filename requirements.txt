@@ -9,4 +9,4 @@ django-filter==0.15.3
 
 # For Image Manipulation
 django-versatileimagefield==1.6.1
-Pillow==3.4.2
+Pillow==9.0.1
